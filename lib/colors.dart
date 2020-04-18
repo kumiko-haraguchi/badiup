@@ -40,3 +40,7 @@ TextStyle getTextStyleWithHex(hex) {
     fontWeight: FontWeight.w600,
   );
 }
+
+Color getColorWithHex(hex) {
+  return Color(int.parse(hex));
+}

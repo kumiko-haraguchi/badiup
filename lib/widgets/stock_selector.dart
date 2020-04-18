@@ -58,7 +58,13 @@ class _StockSelectorState extends State<StockSelector> {
         _customColorList = snapshot.data.documents
             .map((snapshot) => CustomColor.fromSnapshot(snapshot))
             .toList();
-        print(_customColorList);
+
+        CustomColorList customColorList =
+            CustomColorList(customColorList: _customColorList);
+        Map<String, CustomColor> customColorMap = customColorList.getCustomColorMap();
+        String pink = "pink";
+        print(customColorMap[pink].label);
+        print(customColorList.getDisplayTextColorForItemColor("black"));
 
         return _buildAddStockScreen();
       },
@@ -78,7 +84,9 @@ class _StockSelectorState extends State<StockSelector> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AdminNewColorPage(),
+            builder: (context) => AdminNewColorPage(
+                // customColorList: _customColorList
+                ),
           ),
         );
       },
