@@ -26,6 +26,7 @@ enum StockType {
 }
 
 String getDisplayTextForStockType(StockType stockType) {
+  // print(colorMap);
   switch (stockType) {
     case StockType.colorOnly:
       return "色のみ選択";
@@ -83,7 +84,7 @@ Color getDisplayTextColorForItemColor(ItemColor itemColor) {
     case ItemColor.white:
       return paletteGreyColor2;
     case ItemColor.pink:
-      return kPaletteWhite; 
+      return kPaletteWhite;
     case ItemColor.grey:
       return kPaletteWhite;
     default:

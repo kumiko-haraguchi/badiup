@@ -1552,6 +1552,23 @@ class _AdminNewProductPageState extends State<AdminNewProductPage> {
     );
   }
 
+  // Widget _buildNewColorButton(BuildContext context) {
+  //   return IconButton(
+  //     icon: Icon(
+  //       Icons.opacity,
+  //       semanticLabel: 'new_color',
+  //     ),
+  //     onPressed: () {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => AdminNewColorPage(),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   List<PopupMenuChoice> _buildPopupMenuChoices() {
     List<PopupMenuChoice> popupMenuChoices = <PopupMenuChoice>[
       PopupMenuChoice(

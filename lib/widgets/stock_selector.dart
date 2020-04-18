@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
 import 'package:badiup/colors.dart';
 import 'package:badiup/models/stock_model.dart';
-import 'package:flutter/material.dart';
+import 'package:badiup/screens/admin_new_color_page.dart';
+import 'package:badiup/models/custom_color_model.dart';
+import 'package:badiup/constants.dart' as constants;
 
 class StockSelector extends StatefulWidget {
   StockSelector({Key key, this.productStockItem, this.productStockType})
@@ -17,6 +22,7 @@ class _StockSelectorState extends State<StockSelector> {
   ItemSize _stockSize = ItemSize.small;
   ItemColor _stockColor = ItemColor.black;
   var _stockQuantityEditingController = TextEditingController();
+  var _customColorList = List<CustomColor>();
 
   @override
   initState() {
@@ -26,12 +32,57 @@ class _StockSelectorState extends State<StockSelector> {
       _stockColor = widget.productStockItem.color;
       _stockQuantityEditingController.text =
           widget.productStockItem.quantity.toString();
+      _customColorList = null;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(), body: _buildAddStockScreen());
+    return Scaffold(
+        appBar: AppBar(
+          actions: [
+            _buildNewColorButton(context),
+          ],
+        ),
+        body: _buildColorListFromDB(context));
+  }
+
+  Widget _buildColorListFromDB(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance
+          .collection(constants.DBCollections.colors)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return LinearProgressIndicator();
+
+        _customColorList = snapshot.data.documents
+            .map((snapshot) => CustomColor.fromSnapshot(snapshot))
+            .toList();
+        print(_customColorList);
+
+        return _buildAddStockScreen();
+      },
+    );
+  }
+
+  Widget _buildNewColorButton(BuildContext context) {
+    // get colors from DB
+    _buildColorListFromDB(context);
+
+    return IconButton(
+      icon: Icon(
+        Icons.opacity,
+        semanticLabel: 'new_color',
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AdminNewColorPage(),
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildAddStockScreen() {
