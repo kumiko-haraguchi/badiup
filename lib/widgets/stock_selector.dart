@@ -59,12 +59,10 @@ class _StockSelectorState extends State<StockSelector> {
             .map((snapshot) => CustomColor.fromSnapshot(snapshot))
             .toList();
 
-        CustomColorList customColorList =
-            CustomColorList(customColorList: _customColorList);
-        Map<String, CustomColor> customColorMap = customColorList.getCustomColorMap();
-        String pink = "pink";
-        print(customColorMap[pink].label);
-        print(customColorList.getDisplayTextColorForItemColor("black"));
+        // CustomColorList customColorList =
+        //     CustomColorList(customColorList: _customColorList);
+        // Map<String, CustomColor> customColorMap = customColorList.getCustomColorMap();
+        // String pink = "pink";
 
         return _buildAddStockScreen();
       },

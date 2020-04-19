@@ -5,16 +5,17 @@ import 'package:badiup/models/stock_model.dart';
 import 'package:badiup/screens/admin_new_product_page.dart';
 import 'package:badiup/test_keys.dart';
 import 'package:badiup/widgets/product_detail.dart';
+import 'package:badiup/models/custom_color_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AdminProductDetailPage extends StatefulWidget {
-  AdminProductDetailPage({
-    Key key,
-    this.productDocumentId,
-  }) : super(key: key);
+  AdminProductDetailPage(
+      {Key key, this.productDocumentId, this.customColorList})
+      : super(key: key);
 
   final String productDocumentId;
+  final CustomColorList customColorList;
 
   @override
   _AdminProductDetailPageState createState() => _AdminProductDetailPageState();
@@ -85,7 +86,8 @@ class _AdminProductDetailPageState extends State<AdminProductDetailPage> {
         decoration: BoxDecoration(
           color: product.stock.stockType == StockType.sizeOnly
               ? Colors.transparent
-              : getDisplayColorForItemColor(stockItem.color),
+              : widget.customColorList
+                  .getDisplayColorForItemColor(stockItem.color),
           border: product.stock.stockType == StockType.sizeOnly
               ? Border.all(color: paletteGreyColor)
               : null,
@@ -111,7 +113,7 @@ class _AdminProductDetailPageState extends State<AdminProductDetailPage> {
   Widget _buildStockItemText(StockItem stockItem, StockType stockType) {
     Color _color = stockType == StockType.sizeOnly
         ? paletteGreyColor2
-        : getDisplayTextColorForItemColor(stockItem.color);
+        : widget.customColorList.getDisplayTextColorForItemColor(stockItem.color);
 
     return Padding(
       padding: EdgeInsets.all(12),
@@ -178,6 +180,7 @@ class _AdminProductDetailPageState extends State<AdminProductDetailPage> {
           MaterialPageRoute(
             builder: (context) => AdminNewProductPage(
               productDocumentId: widget.productDocumentId,
+              customColorList: widget.customColorList
             ),
           ),
         );

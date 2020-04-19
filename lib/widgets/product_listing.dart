@@ -4,6 +4,7 @@ import 'package:badiup/colors.dart';
 import 'package:badiup/constants.dart' as constants;
 import 'package:badiup/models/product_model.dart';
 import 'package:badiup/models/user_model.dart';
+import 'package:badiup/models/custom_color_model.dart';
 import 'package:badiup/screens/about_badi_page.dart';
 import 'package:badiup/screens/admin_new_product_page.dart';
 import 'package:badiup/screens/admin_product_detail_page.dart';
@@ -18,6 +19,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ProductListing extends StatefulWidget {
+    ProductListing({this.customColorList}) : super();
+
+  final CustomColorList customColorList;
+
   @override
   _ProductListingState createState() => _ProductListingState();
 }
@@ -313,6 +318,7 @@ class _ProductListingState extends State<ProductListing> {
               if (currentSignedInUser.isAdmin()) {
                 return AdminProductDetailPage(
                   productDocumentId: product.documentId,
+                  customColorList: widget.customColorList
                 );
               } else {
                 return CustomerProductDetailPage(
@@ -372,6 +378,7 @@ class _ProductListingState extends State<ProductListing> {
           MaterialPageRoute(
             builder: (context) => AdminNewProductPage(
               productDocumentId: product.documentId,
+              customColorList: widget.customColorList
             ),
           ),
         );

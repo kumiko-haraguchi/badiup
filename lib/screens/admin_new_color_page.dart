@@ -213,7 +213,7 @@ class _NewColorPageState extends State<AdminNewColorPage> {
       label: _labelEditingController.text,
       textColor: _selectedTextColor,
     );
-    print(_color.toString());
+    // print(_color.toString());
     return _color;
   }
 

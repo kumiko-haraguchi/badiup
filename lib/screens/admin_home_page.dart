@@ -8,6 +8,8 @@ import 'package:badiup/sign_in.dart';
 import 'package:badiup/test_keys.dart';
 import 'package:badiup/widgets/main_menu.dart';
 import 'package:badiup/widgets/order_list.dart';
+import 'package:badiup/models/custom_color_model.dart';
+import 'package:badiup/constants.dart' as constants;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +32,12 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
   final Firestore _db = Firestore.instance;
   final FirebaseMessaging _fcm = FirebaseMessaging();
-  StreamSubscription iosSubscription;
-
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  StreamSubscription iosSubscription;
   OrderFilterButtons selectedOrderButton = OrderFilterButtons.all;
-
   OrderStatus orderStatusToFilter = OrderStatus.all;
+  List<CustomColor> _colorList = List<CustomColor>();
+  CustomColorList _customColorList = CustomColorList();
 
   _saveDeviceToken() async {
     String fcmDeviceToken = await _fcm.getToken();
@@ -134,7 +135,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   builder: (context) => AdminOrderDetailPage(
                     orderDocumentId: message['orderDocumentId'],
                   ),
-                ),
+                )
               );
             },
           ),
@@ -149,12 +150,27 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: _buildAppBar(context),
-      body: _buildBody(context),
-      drawer: _buildDrawer(context),
-    );
+    return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection(constants.DBCollections.colors)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return LinearProgressIndicator();
+
+          // set customColorList with colors documents
+          _colorList = snapshot.data.documents
+              .map((snapshot) => CustomColor.fromSnapshot(snapshot))
+              .toList();
+          // set CustomColorList _customColorList with List<CustomColor> _colorList
+          _customColorList = CustomColorList(customColorList: _colorList);
+
+          return Scaffold(
+            key: _scaffoldKey,
+            appBar: _buildAppBar(context),
+            body: _buildBody(context),
+            drawer: _buildDrawer(context),
+          );
+        });
   }
 
   Widget _buildDrawer(BuildContext context) {
@@ -162,7 +178,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     return SizedBox(
       width: width * 0.7,
       child: Drawer(
-        child: MainMenu(),
+        child: MainMenu(customColorList: _customColorList),
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:badiup/config.dart' as config;
 import 'package:badiup/constants.dart' as constants;
 import 'package:badiup/models/product_model.dart';
 import 'package:badiup/models/stock_model.dart';
+import 'package:badiup/models/custom_color_model.dart';
 import 'package:badiup/screens/multi_select_gallery.dart';
 import 'package:badiup/test_keys.dart';
 import 'package:badiup/utilities.dart';
@@ -33,14 +34,13 @@ class PopupMenuChoice {
 }
 
 class AdminNewProductPage extends StatefulWidget {
-  AdminNewProductPage({
-    Key key,
-    this.title,
-    this.productDocumentId,
-  }) : super(key: key);
+  AdminNewProductPage(
+      {Key key, this.title, this.productDocumentId, this.customColorList})
+      : super(key: key);
 
   final String title;
   final String productDocumentId;
+  final CustomColorList customColorList;
 
   @override
   _AdminNewProductPageState createState() => _AdminNewProductPageState();
@@ -425,6 +425,7 @@ class _AdminNewProductPageState extends State<AdminNewProductPage> {
   }
 
   Widget _buildStockItem(StockItem stockItem) {
+    print('---_buildStockItem ${widget.customColorList}');
     return GestureDetector(
       onTap: () async {
         await _updateStockInMap(stockItem);
@@ -434,7 +435,8 @@ class _AdminNewProductPageState extends State<AdminNewProductPage> {
         decoration: BoxDecoration(
           color: _productStockType == StockType.sizeOnly
               ? Colors.transparent
-              : getDisplayColorForItemColor(stockItem.color),
+              : widget.customColorList
+                  .getDisplayColorForItemColor(stockItem.color),
           border: _productStockType == StockType.sizeOnly
               ? Border.all(color: paletteGreyColor)
               : null,
@@ -549,7 +551,7 @@ class _AdminNewProductPageState extends State<AdminNewProductPage> {
   Widget _buildStockItemText(StockItem stockItem) {
     Color _color = _productStockType == StockType.sizeOnly
         ? paletteGreyColor2
-        : getDisplayTextColorForItemColor(stockItem.color);
+        : widget.customColorList.getDisplayTextColorForItemColor(stockItem.color);
 
     return Padding(
       padding: EdgeInsets.all(12),

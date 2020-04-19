@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:badiup/colors.dart';
+import 'package:badiup/models/stock_model.dart';
 
 class CustomColor {
   final String name;
@@ -62,7 +63,7 @@ class CustomColor {
 
 class CustomColorList {
   final List<CustomColor> customColorList;
-  Map<String, CustomColor> customColorMap = {};
+  // static Map<String, CustomColor> customColorMap = {};
   Map<String, Color> textColorMap = {
     "grey": paletteGreyColor2,
     "white": kPaletteWhite
@@ -73,24 +74,33 @@ class CustomColorList {
   });
 
   Map<String, CustomColor> getCustomColorMap() {
+    Map<String, CustomColor> customColorMap = {};
     this.customColorList.forEach((color) => customColorMap[color.name] = color);
 
     return customColorMap;
   }
 
-  String getDisplayTextForItemColor(String colorName) {
+  String getDisplayTextForItemColor(ItemColor color) {
+    var customColorMap = getCustomColorMap();
+    String colorName = color.toString().substring(10);
     return customColorMap[colorName] == null
         ? ""
         : customColorMap[colorName].label;
   }
 
-  Color getDisplayColorForItemColor(String colorName) {
+  Color getDisplayColorForItemColor(ItemColor color) {
+    var customColorMap = getCustomColorMap();
+    String colorName = color.toString().substring(10);
+
     return customColorMap[colorName] == null
         ? Colors.transparent
-        : getColorWithHex(customColorMap[colorName].hex);
+        : getColorWithHex(customColorMap
+        [colorName].hex);
   }
 
-  Color getDisplayTextColorForItemColor(String colorName) {
+  Color getDisplayTextColorForItemColor(ItemColor color) {
+    var customColorMap = getCustomColorMap();
+    String colorName = color.toString().substring(10);
     return customColorMap[colorName] == null
         ? paletteGreyColor2
         : textColorMap[customColorMap[colorName].textColor];

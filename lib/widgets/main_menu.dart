@@ -1,4 +1,5 @@
 import 'package:badiup/colors.dart';
+import 'package:badiup/models/custom_color_model.dart';
 import 'package:badiup/screens/about_badi_page.dart';
 import 'package:badiup/screens/admin_product_listing_page.dart';
 import 'package:badiup/screens/cart_page.dart';
@@ -13,6 +14,13 @@ import 'package:badiup/test_keys.dart';
 import 'package:flutter/material.dart';
 
 class MainMenu extends StatefulWidget {
+  MainMenu({
+    Key key,
+    this.customColorList,
+  }) : super();
+
+  final CustomColorList customColorList;
+
   @override
   _MainMenuState createState() => _MainMenuState();
 }
@@ -99,7 +107,7 @@ class _MainMenuState extends State<MainMenu> {
           context,
           MaterialPageRoute(
             builder: (context) => currentSignedInUser.isAdmin()
-                ? AdminProductListingPage()
+                ? AdminProductListingPage(customColorList: widget.customColorList)
                 : CustomerHomePage(),
           ),
         );
